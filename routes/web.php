@@ -35,3 +35,7 @@ Route::group(['prefix' => 'sample'], function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/sample/dashbord', 'SampleController@dashbord');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
