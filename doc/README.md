@@ -1,7 +1,7 @@
 Laravel初期設定（このdoc以外がLaravelを設置して微調整したものです）
 APP_KEYは必ず設定しなおしてください。（設定参考）
 doc以外を捨ててしまった場合に1から作りだす手順（サーバー側の設定は行う必要があります）
-(実装した基本機能は触れません)
+(実装した基本機能やconfig、envの設定は触れません)
 
 ## Laravel設置
 
@@ -18,7 +18,7 @@ php artisan key:generate
 
 ```
 rm .env
-mv .env.example .env.local
+rm .env.example .env.local
 ```
 
 configフォルダ内のファイルに記載されているenv関数の第２引数は「デフォルト値」です。この値は指定したキーの環境変数が存在しない場合に返されます。(サーバーを通さないphpunit等ではAPP_ENVが未定義のため.envを読み込みに行くが、これを配置しないならconfigのenvのみの設定が使用されるのでその場合のために設定しておくこと。)
@@ -47,6 +47,18 @@ nginx.conf
 
 ```
 nginx -s reload
+```
+
+# DB初期構築
+
+DBはSQLで管理したいので`php artisan migrate`は使いません
+`php artisan make:auth`で作る認証機能用のDBもSQLに移しました。（テーブル名を変えていますので）
+
+アプリのルートディレクトリで
+
+```
+mysql -u root -p[password] < doc/app.sql
+mysql -u root -p[password] < doc/app_test.sql
 ```
 
 ## テスト
