@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'JST',
+    'timezone' => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'base64:ruScEiVL014sKicPMGty9iSbtcyVKcDto93qwDFrbO4='),
 
     'cipher' => 'AES-256-CBC',
 
