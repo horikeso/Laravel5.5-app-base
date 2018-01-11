@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // set config
+        config(['cache.expire_minutes' => 5]);
     }
 
     /**
