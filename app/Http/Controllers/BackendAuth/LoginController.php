@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -61,6 +62,10 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+        if (Auth::guard('backend_web')->check())
+        {
+            return redirect()->route('backend.home');
+        }
         return view('backend_auth.login');
     }
 

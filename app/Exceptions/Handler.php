@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Access\AuthorizationException as AccessAuthorizationException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,7 +51,35 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if ($exception instanceof AccessAuthorizationException)
+        {
+            return response()->view('error.403', [], 403);
+        }
+
+        if ( ! $this->isHttpException($exception))
+        {
+            return parent::render($request, $exception);
+        }
+
+        $status_code = $exception->getStatusCode();
+
+        switch ($status_code)
+        {
+            case 403:
+                return response()->view('error.403', [], $status_code);
+                break;
+            case 404:
+                return response()->view('error.404', [], $status_code);
+                break;
+            case 500:
+                return response()->view('error.500', [], $status_code);
+                break;
+            case 503:
+                return response()->view('error.503', [], $status_code);
+                break;
+            default:
+                return parent::render($request, $exception);
+        }
     }
 
     // 認証されていない場合のリダイレクト先設定の上書き

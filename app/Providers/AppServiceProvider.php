@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // set config
         config(['cache.expire_minutes' => 5]);
+        config(['backend_super_admin_id' => 1]);
     }
 
     /**

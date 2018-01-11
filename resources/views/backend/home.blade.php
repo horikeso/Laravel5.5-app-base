@@ -8,6 +8,9 @@
                 <div class="panel-heading">BackendDashboard</div>
 
                 <div class="panel-body">
+                    @can('admin')
+                        <div>admin Gate</div>
+                    @endcan
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
