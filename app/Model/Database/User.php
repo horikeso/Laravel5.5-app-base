@@ -2,6 +2,8 @@
 
 namespace App\Model\Database;
 
+// @see https://readouble.com/laravel/5.5/ja/facades.html#how-facades-work
+// @see https://laravel.com/api/5.5/Illuminate\Database\Query\Builder.html
 use Illuminate\Support\Facades\DB;
 
 class User extends Base

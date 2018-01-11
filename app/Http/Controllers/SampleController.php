@@ -7,9 +7,11 @@ use Request;
 use Illuminate\Http\Request as IlluminateRequest;
 use Validator;
 use Illuminate\View\View;
+use App\Model\Sample;
 
 class SampleController extends Controller
 {
+
     /**
      * method GET guerystring and segment validation sample
      *
@@ -31,8 +33,13 @@ class SampleController extends Controller
             }
         });
 
+        // use model example
+        $sample = Sample::getInstance();
+        $data['random'] = $sample->getRandom();
+
+        $data['direct_errors'] = $validator->errors();
+
         if ($validator->fails()) {
-            $data['direct_errors'] = $validator->errors();
             return view('sample_form', $data);
         }
 
@@ -52,6 +59,9 @@ class SampleController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'password' => 'required|regex:/^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[ -\/:-@\[-`\{-\~])/',
+        ],
+        [
+            'password.regex' => '半角英数記号を含めてください。',
         ]);
 
         if ($validator->fails()) {

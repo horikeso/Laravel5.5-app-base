@@ -9,7 +9,8 @@
     <script src="/js/components/load_example.js" defer></script>
 </head>
 <body>
-{{ $id }}
+{{ $id }}<br>
+{{ $random }}<br>
 @if ($errors->any() || $direct_errors->any())
     <div class="alert alert-danger">
         <ul>

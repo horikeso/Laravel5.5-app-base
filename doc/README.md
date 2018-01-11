@@ -7,6 +7,8 @@ doc以外を捨ててしまった場合に1から作りだす手順（サーバ�
 
 ```
 composer create-project --prefer-dist laravel/laravel:5.5.0 .
+composer require --dev php-mock/php-mock-phpunit
+composer update
 ```
 
 ## 設定
