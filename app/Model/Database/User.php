@@ -6,8 +6,10 @@ namespace App\Model\Database;
 // @see https://laravel.com/api/5.5/Illuminate\Database\Query\Builder.html
 use Illuminate\Support\Facades\DB;
 
-class User extends Base
+class User
 {
+
+    use BaseTrait;
 
     /**
      * ユーザー登録

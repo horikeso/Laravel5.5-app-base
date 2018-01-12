@@ -2,7 +2,7 @@
 
 namespace App\Model\Database;
 
-abstract class Base
+trait BaseTrait
 {
 
     private static $instance;

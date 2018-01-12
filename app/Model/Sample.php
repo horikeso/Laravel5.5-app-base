@@ -4,8 +4,10 @@ namespace App\Model;
 
 use Illuminate\Support\Facades\Cache;
 
-class Sample extends Base
+class Sample
 {
+
+    use BaseTrait;
 
     /**
      * sample function

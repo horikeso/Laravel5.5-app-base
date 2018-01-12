@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 class UserTest extends TestCase
 {
-    private static $user;
+    private static $model;
 
     public static function setUpBeforeClass()
     {
-        self::$user = User::getInstance();
+        self::$model = User::getInstance();
     }
 
     protected function tearDown()
     {
-        DB::table(self::$user->getTableName())->truncate();
+        DB::table(self::$model->getTableName())->truncate();
 
         parent::tearDown();
     }
@@ -33,7 +33,7 @@ class UserTest extends TestCase
             'email' => 'test_email',
         ];
 
-        $this->assertTrue(self::$user->create($user_data));
+        $this->assertTrue(self::$model->create($user_data));
     }
 
     public function testCreateFailure()
@@ -47,7 +47,7 @@ class UserTest extends TestCase
             'email' => 'test_email',
         ];
 
-        $this->assertTrue(self::$user->create($user_data));
-        $this->assertFalse(self::$user->create($user_data));
+        $this->assertTrue(self::$model->create($user_data));
+        $this->assertFalse(self::$model->create($user_data));
     }
 }
