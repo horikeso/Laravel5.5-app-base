@@ -53,8 +53,8 @@ Route::group(['prefix' => 'backend'], function() {
     $this->get('password/reset/{token}', 'BackendAuth\ResetPasswordController@showResetForm')->name('backend.password.reset');
     $this->post('password/reset', 'BackendAuth\ResetPasswordController@reset');
 
-    // can:admin 権限判定（admin Gateを通過したユーザーのみアクセス可能）
-    Route::group(['middleware' => ['auth:backend_web', 'can:admin']], function () {
+    // can:all 権限判定（all Gateを通過したユーザーのみアクセス可能）
+    Route::group(['middleware' => ['auth:backend_web', 'can:all']], function () {
         Route::get('home', 'BackendHomeController@index')->name('backend.home');
     });
 });

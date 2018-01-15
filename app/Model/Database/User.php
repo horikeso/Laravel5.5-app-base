@@ -32,4 +32,33 @@ class User
 
         return $result_flag;
     }
+
+    /**
+     * ユーザー一覧を取得
+     *
+     * @param int|null $offset
+     * @param int|null $limit
+     * @param string|null $search
+     * @return array[\stdClass]
+     */
+    public function getList(int $offset = null, int $limit = null, string $search = null): array
+    {
+        $builder = DB::table($this->table_name)
+                ->where('delete_flag', 0)
+                ->orderBy('id', 'desc');
+
+        if ( ! empty($search))
+        {
+            $builder->where('name', 'like', '%' . $search . '%');
+        }
+
+        if (isset($offset) && isset($limit))
+        {
+            $builder->offset($offset)->limit($limit);
+        }
+
+        $user_object_list = $builder->get()->all();
+
+        return $user_object_list;
+    }
 }

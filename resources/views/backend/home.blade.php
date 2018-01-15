@@ -10,6 +10,11 @@
                 <div class="panel-body">
                     @can('admin')
                         <div>admin Gate</div>
+                        <div>{{ $admin }}</div>
+                    @endcan
+                    @can('general')
+                        <div>general Gate</div>
+                        <div>{{ $general }}</div>
                     @endcan
                     @if (session('status'))
                         <div class="alert alert-success">
