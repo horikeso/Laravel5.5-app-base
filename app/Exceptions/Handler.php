@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException as AccessAuthorizationException;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -54,6 +55,11 @@ class Handler extends ExceptionHandler
         if ($exception instanceof AccessAuthorizationException)
         {
             return response()->view('error.403', [], 403);
+        }
+
+        if ($exception instanceof TokenMismatchException)
+        {
+            return response()->view('error.419', [], 419);
         }
 
         if ( ! $this->isHttpException($exception))
