@@ -28,6 +28,7 @@ Route::get('/', function () {
 Auth::routes();// Authentication Routes... Registration Routes... Password Reset Routes...
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::post('/home', 'HomeController@search');
 });
 
 

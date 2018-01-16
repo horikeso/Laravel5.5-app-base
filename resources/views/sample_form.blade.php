@@ -29,7 +29,7 @@
 <form method="POST" action="{{route('sampleExecute')}}">
     name: <input type="text" name="name" value="{{ (old('name')) ? old('name') : '' }}"><br>
     password: <input type="password" name="password" value=""><br>
-    <input type="hidden" name="_token" value="{{csrf_token()}}">
+    {{ csrf_field() }}
     <input type="submit" value="送信">
 </form>
 </body>

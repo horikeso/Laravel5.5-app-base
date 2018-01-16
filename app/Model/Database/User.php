@@ -34,6 +34,27 @@ class User
     }
 
     /**
+     * ユーザー数を取得
+     *
+     * @param string|null $search
+     * @return int
+     */
+    public function getListCount(string $search = null): int
+    {
+        $builder = DB::table($this->table_name)
+                ->where('delete_flag', 0);
+
+        if ( ! empty($search))
+        {
+            $builder->where('name', 'like', '%' . $search . '%');
+        }
+
+        $user_count = $builder->count();
+
+        return $user_count;
+    }
+
+    /**
      * ユーザー一覧を取得
      *
      * @param int|null $offset

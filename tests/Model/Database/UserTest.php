@@ -51,6 +51,96 @@ class UserTest extends TestCase
         $this->assertFalse(self::$model->create($user_data));
     }
 
+    public function testGetListCount()
+    {
+        $user_data1 = [
+            'name' => 'test_name',
+            'email' => 'test_email1',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 1,
+            'updated_at' => '2018-01-01 00:00:00',
+            'created_at' => '2018-01-01 00:00:00',
+            'delete_datetime' => '2018-01-01 00:00:00',
+            'delete_flag' => 1,
+        ];
+
+        $user_data2 = [
+            'name' => 'test_name',
+            'email' => 'test_email2',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 2,
+            'updated_at' => '2018-01-01 00:00:00',
+            'created_at' => '2018-01-01 00:00:00',
+            'delete_flag' => 0,
+        ];
+
+        $user_data3 = [
+            'name' => 'test_name',
+            'email' => 'test_email3',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 2,
+            'updated_at' => '2018-01-01 00:00:00',
+            'created_at' => '2018-01-01 00:00:00',
+            'delete_flag' => 0,
+        ];
+
+        DB::table(self::$model->getTableName())->insert($user_data1);
+        DB::table(self::$model->getTableName())->insert($user_data2);
+        DB::table(self::$model->getTableName())->insert($user_data3);
+
+        $expected = 2;
+
+        $this->assertSame($expected, self::$model->getListCount());
+    }
+
+    public function testGetListCountSearch()
+    {
+        $user_data1 = [
+            'name' => 'target_test_name',
+            'email' => 'test_email1',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 1,
+            'updated_at' => '2018-01-01 00:00:00',
+            'created_at' => '2018-01-01 00:00:00',
+            'delete_datetime' => '2018-01-01 00:00:00',
+            'delete_flag' => 1,
+        ];
+
+        $user_data2 = [
+            'name' => 'target_test_name',
+            'email' => 'test_email2',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 2,
+            'updated_at' => '2018-01-01 00:00:00',
+            'created_at' => '2018-01-01 00:00:00',
+            'delete_flag' => 0,
+        ];
+
+        $user_data3 = [
+            'name' => 'test_name',
+            'email' => 'test_email3',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 2,
+            'updated_at' => '2018-01-01 00:00:00',
+            'created_at' => '2018-01-01 00:00:00',
+            'delete_flag' => 0,
+        ];
+
+        DB::table(self::$model->getTableName())->insert($user_data1);
+        DB::table(self::$model->getTableName())->insert($user_data2);
+        DB::table(self::$model->getTableName())->insert($user_data3);
+
+        $expected = 1;
+        $search = 'target';
+        $this->assertSame($expected, self::$model->getListCount($search));
+    }
+
     public function testGetList()
     {
         $user_data1 = [
