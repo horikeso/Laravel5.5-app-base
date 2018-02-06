@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Support\Facades\Cache;
+use App\Model\Database\User;
 
 class Sample
 {
@@ -16,17 +17,27 @@ class Sample
      */
     public function getRandom(): int
     {
-        return $this->createRandom();
+        return rand(1, 1000);
     }
 
     /**
      * sample function
      *
-     * @return int
+     * @return boolean
      */
-    public function createRandom(): int
+    public function createUser(): bool
     {
-        return rand(1, 1000);
+        $user_data = [
+            'name' => 'test_name',
+            'email' => 'test_email',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 1,
+            'email' => 'test_email',
+        ];
+
+        $user_database_model = User::getInstance();
+        return $user_database_model->create($user_data);
     }
 
     /**

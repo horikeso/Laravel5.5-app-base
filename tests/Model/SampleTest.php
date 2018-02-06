@@ -4,37 +4,42 @@ namespace Tests\Model;
 
 use Tests\TestCase;
 use App\Model\Sample;
+use AspectMock\Test as AspectMockTest;
 
 class SampleTest extends TestCase
 {
-    // @see http://url.com https://github.com/php-mock/php-mock-phpunit
-    use \phpmock\phpunit\PHPMock;
+    private static $model;
+
+    public static function setUpBeforeClass()
+    {
+        self::$model = Sample::getInstance();
+    }
 
     public function testGetRandom()
     {
-        $mock = \Mockery::mock('App\Model\Sample');
-        $mock->shouldReceive('getRandom')->passthru();// methodをmockせずにそのまま使用する
-        $mock->shouldReceive('createRandom')
-            ->once()
-            ->with()
-            ->andReturn(1000);
+        AspectMockTest::func('App\Model', 'rand', 1000);
 
         $expected = 1000;
 
-        $this->assertSame($expected, $mock->getRandom());
+        $this->assertSame($expected, self::$model->getRandom());
     }
 
-    public function testCreateRandom()
+    public function testCreateUser()
     {
-        $mock = \Mockery::mock('App\Model\Sample');
-        $mock->shouldReceive('createRandom')->passthru();// methodをmockせずにそのまま使用する
+        $user_data = [
+            'name' => 'test_name',
+            'email' => 'test_email',
+            'password' => 'test_password',
+            'remember_token' => 'test_remember_token',
+            'role' => 1,
+            'email' => 'test_email',
+        ];
 
-        $rand = $this->getFunctionMock('App\Model', 'rand');// name space App\Model で使用されるrand()をモック
-        $rand->expects($this->once())->with(1, 1000)->willReturn(1000);
+        $test = AspectMockTest::double('App\Model\Sample', ['createUser' => true]);
 
-        $expected = 1000;
+        $this->assertTrue(self::$model->createUser());
 
-        $this->assertSame($expected, $mock->createRandom());
+        $test->verifyInvokedOnce('createUser');
     }
 
     public function testCache()
@@ -43,16 +48,15 @@ class SampleTest extends TestCase
         $value1 = 'value1';
         $value2 = 'value2';
 
-        $sample = Sample::getInstance();
-        $sample->setCache($key, $value1);
-        $this->assertSame($value1, $sample->getCache($key));
-        $sample->setCache($key, $value2);
-        $this->assertSame($value2, $sample->getCache($key));
-        $this->assertSame($value2, $sample->getAndDeleteCache($key));
-        $this->assertNull($sample->getCache($key));
-        $sample->setCache($key, $value1);
-        $this->assertSame($value1, $sample->getCache($key));
-        $sample->deleteCache($key);
-        $this->assertNull($sample->getCache($key));
+        self::$model->setCache($key, $value1);
+        $this->assertSame($value1, self::$model->getCache($key));
+        self::$model->setCache($key, $value2);
+        $this->assertSame($value2, self::$model->getCache($key));
+        $this->assertSame($value2, self::$model->getAndDeleteCache($key));
+        $this->assertNull(self::$model->getCache($key));
+        self::$model->setCache($key, $value1);
+        $this->assertSame($value1, self::$model->getCache($key));
+        self::$model->deleteCache($key);
+        $this->assertNull(self::$model->getCache($key));
     }
 }
