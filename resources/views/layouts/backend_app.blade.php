@@ -47,7 +47,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @guest
+                        @guest('backend_web')
                             <li><a href="{{ route('backend.login') }}">Login</a></li>
                             <li><a href="{{ route('backend.register') }}">Register</a></li>
                         @else

@@ -44,7 +44,7 @@ return [
     'filled'               => ':attributeは必須項目です。',
     'image'                => ':attributeは画像形式ではありません。',
     'in'                   => '選択された:attributeは正しくありません。',
-    'in_array'             => 'The :attribute field does not exist in :other.',
+    'in_array'             => ':attributeは:otherに存在しません。',
     'integer'              => ':attributeは整数にしてください。',
     'ip'                   => ':attributeは正しいIPアドレス形式ではありません。',
     'ipv4'                 => ':attributeは正しいIPアドレス形式ではありません。',

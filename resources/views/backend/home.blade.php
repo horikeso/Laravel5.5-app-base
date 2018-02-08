@@ -23,6 +23,32 @@
                     @endif
 
                     You are logged in!
+
+                    <table class="table table-striped table-hover table-bordered">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            @can('admin')
+                                <th>&nbsp;</th>
+                            @endcan
+                        </tr>
+                        @foreach ($user_object_list as $user_object)
+                            <tr>
+                                <td>{{ $user_object->id }}</td>
+                                <td>{{ $user_object->name }}</td>
+                                <td>{{ $user_object->email }}</td>
+                                @can('admin')
+                                    <td>
+                                        <form method="POST" action="{{ route('backend.user.delete', $user_object->id) }}">
+                                            {{ csrf_field() }}
+                                            <a href="javascript:void(0)" onclick="this.parentNode.submit()">削除</a>
+                                        </form>
+                                    </td>
+                                @endcan
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>

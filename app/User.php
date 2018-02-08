@@ -5,10 +5,15 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\CustomPasswordReset;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
+
+    const UPDATED_AT = 'update_datetime';
+    const CREATED_AT = 'create_datetime';
+    const DELETED_AT = 'delete_datetime';
 
     protected $table = 'user';
 
@@ -42,4 +47,5 @@ class User extends Authenticatable
     {
         $this->notify(new CustomPasswordReset($token));
     }
+
 }

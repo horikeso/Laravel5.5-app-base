@@ -12,17 +12,41 @@ class User
     use BaseTrait;
 
     /**
-     * ユーザー登録
+     * IDで取得
      *
-     * @param array $user_data
+     * @param int $id
+     * @return \stdClass|null
+     */
+    public function getById(int $id): ?\stdClass
+    {
+        $user_object = DB::table($this->table_name)
+                ->where('id', $id)
+                ->where('delete_flag', 0)
+                ->first();
+
+        return $user_object;
+    }
+
+    /**
+     * ユーザー削除
+     *
+     * @params int $id
      * @return boolean
      */
-    public function create(array $user_data): bool
+    public function deleteById(int $id): bool
     {
+        $user_data = [];
+        $current_datetime = date('Y-m-d H:i:s');
+
+        $user_data['update_datetime'] = $current_datetime;
+        $user_data['delete_datetime'] = $current_datetime;
+        $user_data['delete_flag'] = 1;
+
         try
         {
-            $result_flag = DB::table($this->table_name)
-                ->insert($user_data);
+            $count = DB::table($this->table_name)
+                ->where('id', $id)
+                ->update($user_data);
         }
         catch(\Exception $exception)
         {
@@ -30,7 +54,7 @@ class User
             return false;
         }
 
-        return $result_flag;
+        return $count === 1;
     }
 
     /**
@@ -46,7 +70,10 @@ class User
 
         if ( ! empty($search))
         {
-            $builder->where('name', 'like', '%' . $search . '%');
+            $builder->where(function($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            });
         }
 
         $user_count = $builder->count();
@@ -70,7 +97,10 @@ class User
 
         if ( ! empty($search))
         {
-            $builder->where('name', 'like', '%' . $search . '%');
+            $builder->where(function($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            });
         }
 
         if (isset($offset) && isset($limit))

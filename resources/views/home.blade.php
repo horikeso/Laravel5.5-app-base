@@ -29,7 +29,7 @@
                         {{ csrf_field() }}
                         <div class="row">
                             <div class="col-md-8">
-                                <input class="form-control" type="text" name="search" value="{{ $search }}">
+                                <input class="form-control" type="text" name="search" value="{{ $search }}" maxlength="255">
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">Search</button>

@@ -17,29 +17,31 @@ class SampleTest extends TestCase
 
     public function testGetRandom()
     {
-        AspectMockTest::func('App\Model', 'rand', 1000);
+        AspectMockTest::func('App\Model', 'random_int', 1000);
 
         $expected = 1000;
 
         $this->assertSame($expected, self::$model->getRandom());
     }
 
-    public function testCreateUser()
+    public function testGetUserById()
     {
-        $user_data = [
-            'name' => 'test_name',
-            'email' => 'test_email',
-            'password' => 'test_password',
-            'remember_token' => 'test_remember_token',
-            'role' => 1,
-            'email' => 'test_email',
-        ];
+        $object = new \stdClass();
 
-        $test = AspectMockTest::double('App\Model\Sample', ['createUser' => true]);
+        $test = AspectMockTest::double('App\Model\Database\User', ['getById' => $object]);
 
-        $this->assertTrue(self::$model->createUser());
+        $this->assertSame($object, self::$model->getUserById(1));
 
-        $test->verifyInvokedOnce('createUser');
+        $test->verifyInvokedOnce('getById');
+    }
+
+    public function testGetUserByIdNull()
+    {
+        $test = AspectMockTest::double('App\Model\Database\User', ['getById' => null]);
+
+        $this->assertNull(self::$model->getUserById(1));
+
+        $test->verifyInvokedOnce('getById');
     }
 
     public function testCache()

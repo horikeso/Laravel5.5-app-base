@@ -57,5 +57,8 @@ Route::group(['prefix' => 'backend'], function() {
     // can:all 権限判定（all Gateを通過したユーザーのみアクセス可能）
     Route::group(['middleware' => ['auth:backend_web', 'can:all']], function () {
         Route::get('home', 'BackendHomeController@index')->name('backend.home');
+        Route::post('home', 'BackendHomeController@search');
+
+        Route::post('user/delete/{id}', 'UserController@delete')->where(['id' => '[0-9]+'])->name('backend.user.delete');
     });
 });

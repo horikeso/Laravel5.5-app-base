@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Request;
-use Illuminate\Http\Request as IlluminateRequest;
+use Illuminate\Http\Request as HttpRequest;
 use Validator;
 use Illuminate\View\View;
 use App\Model\Sample;
@@ -49,10 +49,10 @@ class SampleController extends Controller
     /**
      * method POST validation sample
      *
-     * @param IlluminateRequest $request
+     * @param Illuminate\Http\Request $request
      * @return Response
      */
-    public function execute(IlluminateRequest $request)
+    public function execute(HttpRequest $request)
     {
         $data = [];
 

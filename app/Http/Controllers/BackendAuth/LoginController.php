@@ -37,7 +37,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:backend_web')->except('logout');
     }
 
     /**
@@ -79,7 +79,7 @@ class LoginController extends Controller
     {
         $this->guard()->logout();
 
-        $request->session()->invalidate();
+        // $request->session()->invalidate();
 
         return redirect('/backend');
     }

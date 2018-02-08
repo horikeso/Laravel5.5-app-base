@@ -27,14 +27,14 @@ class HomeController extends Controller
         ]);
 
         $page_model = Page::getInstance();
-        $user_db_model = User::getInstance();
+        $user_database_model = User::getInstance();
 
         $page = $validator->fails() ? 1 : Request::query('page');
         $data['search'] = Cache::get('home_search' . Auth::user()->id);
-        $item_count = $user_db_model->getListCount($data['search']);
+        $item_count = $user_database_model->getListCount($data['search']);
 
         $data['page_data'] = $page_model->getPageData($page, $item_count);
-        $data['user_object_list'] = $user_db_model->getList($data['page_data']['offset'], $data['page_data']['limit'], $data['search']);
+        $data['user_object_list'] = $user_database_model->getList($data['page_data']['offset'], $data['page_data']['limit'], $data['search']);
 
         return view('home', $data);
     }
@@ -42,6 +42,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function search(HttpRequest $request)
@@ -53,7 +54,7 @@ class HomeController extends Controller
         ]);
 
         $page_model = Page::getInstance();
-        $user_db_model = User::getInstance();
+        $user_database_model = User::getInstance();
 
         $page = $validator->fails() ? 1 : Request::query('page');
         $data['search'] = $request->search;
@@ -67,10 +68,10 @@ class HomeController extends Controller
             Cache::delete('home_search' . Auth::user()->id);
         }
 
-        $item_count = $user_db_model->getListCount($request->search);
+        $item_count = $user_database_model->getListCount($request->search);
 
         $data['page_data'] = $page_model->getPageData($page, $item_count);
-        $data['user_object_list'] = $user_db_model->getList($data['page_data']['offset'], $data['page_data']['limit'], $request->search);
+        $data['user_object_list'] = $user_database_model->getList($data['page_data']['offset'], $data['page_data']['limit'], $request->search);
 
         return view('home', $data);
     }

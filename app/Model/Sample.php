@@ -17,27 +17,19 @@ class Sample
      */
     public function getRandom(): int
     {
-        return rand(1, 1000);
+        return random_int(1, 1000);
     }
 
     /**
      * sample function
      *
-     * @return boolean
+     * @param int $id
+     * @return \stdClass|null
      */
-    public function createUser(): bool
+    public function getUserById(int $id): ?\stdClass
     {
-        $user_data = [
-            'name' => 'test_name',
-            'email' => 'test_email',
-            'password' => 'test_password',
-            'remember_token' => 'test_remember_token',
-            'role' => 1,
-            'email' => 'test_email',
-        ];
-
         $user_database_model = User::getInstance();
-        return $user_database_model->create($user_data);
+        return $user_database_model->getById($id);
     }
 
     /**
