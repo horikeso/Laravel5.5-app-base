@@ -52,14 +52,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        $blade_base = '';
+
+        if ($request->segment(1) === 'backend')
+        {
+            $blade_base .= $request->segment(1).'.';
+        }
+
         if ($exception instanceof AccessAuthorizationException)
         {
-            return response()->view('error.403', [], 403);
+            return response()->view('error.'.$blade_base.'403', [], 403);
         }
 
         if ($exception instanceof TokenMismatchException)
         {
-            return response()->view('error.419', [], 419);
+            return response()->view('error.'.$blade_base.'419', [], 419);
         }
 
         if ( ! $this->isHttpException($exception))
@@ -72,16 +80,16 @@ class Handler extends ExceptionHandler
         switch ($status_code)
         {
             case 403:
-                return response()->view('error.403', [], $status_code);
+                return response()->view('error.'.$blade_base.'403', [], $status_code);
                 break;
             case 404:
-                return response()->view('error.404', [], $status_code);
+                return response()->view('error.'.$blade_base.'404', [], $status_code);
                 break;
             case 500:
-                return response()->view('error.500', [], $status_code);
+                return response()->view('error.'.$blade_base.'500', [], $status_code);
                 break;
             case 503:
-                return response()->view('error.503', [], $status_code);
+                return response()->view('error.'.$blade_base.'503', [], $status_code);
                 break;
             default:
                 return parent::render($request, $exception);
