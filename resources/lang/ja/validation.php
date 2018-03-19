@@ -41,7 +41,7 @@ return [
     'email'                => ':attributeは正しいメールアドレス形式ではありません。',
     'exists'               => '選択された:attributeは正しくありません。',
     'file'                 => ':attributeはファイル形式ではありません。',
-    'filled'               => ':attributeは必須項目です。',
+    'filled'               => ':attributeは空以外にしてください。',
     'image'                => ':attributeは画像形式ではありません。',
     'in'                   => '選択された:attributeは正しくありません。',
     'in_array'             => ':attributeは:otherに存在しません。',
