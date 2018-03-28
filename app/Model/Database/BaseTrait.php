@@ -16,11 +16,9 @@ trait BaseTrait
 
     public static function getInstance()
     {
-        $class = get_called_class();
-
         if ( ! self::$instance)
         {
-            self::$instance = new $class;
+            self::$instance = new static();
         }
 
         return self::$instance;
