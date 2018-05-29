@@ -48,9 +48,9 @@ class User
                 ->where('id', $id)
                 ->update($user_data);
         }
-        catch(\Exception $exception)
+        catch (\Throwable $error)
         {
-        	\Log::error($exception->getMessage());
+        	\Log::error($error->getMessage());
             return false;
         }
 
