@@ -29,6 +29,15 @@ configフォルダ内のファイルに記載されているenv関数の第２�
 
 nginx.conf
 ```
+        # here ssl and http2 settings
+
+        # gzip settings
+        gzip on;
+        gzip_types image/gif image/png image/jpeg text/css application/javascript application/json application/font-woff application/font-tff application/octet-stream;
+        gzip_min_length 1000;
+        gzip_proxied any;
+        gunzip on;
+
         # 413 Request Entity Too Large
         client_max_body_size 20M;
 
