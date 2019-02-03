@@ -20,7 +20,7 @@ php artisan key:generate
 
 ```
 rm .env
-rm .env.example .env.local
+mv .env.example .env.local
 ```
 
 configフォルダ内のファイルに記載されているenv関数の第２引数は「デフォルト値」です。この値は指定したキーの環境変数が存在しない場合に返されます。(サーバーを通さないphpunit等ではAPP_ENVが未定義のため.envを読み込みに行くが、これを配置しないならconfigのenvのみの設定が使用されるのでその場合のために設定しておくこと。)
