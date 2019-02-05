@@ -6,6 +6,9 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Models\Database\User as DatabaseUser;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -36,7 +39,10 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:web');
+        $this->middleware('guest:web', ['except' => [
+            'showGeneralRegistrationForm',
+            'generalRegister',
+        ]]);
     }
 
     /**
@@ -69,6 +75,94 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'role' => \App\Models\Role::ADMIN,
+        ]);
+    }
+
+    // RegistersUsers traitの上書き
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        // 管理者が登録されているか
+        $userDatabaseModel = DatabaseUser::getInstance();
+        if ($userDatabaseModel->isRegisteredAdmin())
+        {
+            return redirect()->route('login');
+        }
+
+        return view('auth.register');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        // 管理者が登録されているか
+        $userDatabaseModel = DatabaseUser::getInstance();
+        if ($userDatabaseModel->isRegisteredAdmin())
+        {
+            return redirect()->back()->withErrors(['admin' => 'これ以上の登録はできません。'])->withInput();
+        }
+
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
+    }
+
+    // 追加
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showGeneralRegistrationForm()
+    {
+        return view('general.register');
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function generalRegister(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->generalCreate($request->all())));
+
+        return redirect()->route('general');
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    private function generalCreate(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => \App\Models\Role::GENERAL,
         ]);
     }
 }

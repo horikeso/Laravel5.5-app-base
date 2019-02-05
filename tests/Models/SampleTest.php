@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Model;
+namespace Tests\Models;
 
 use Tests\TestCase;
-use App\Model\Sample;
+use App\Models\Sample;
 use AspectMock\Test as AspectMockTest;
 
 class SampleTest extends TestCase
@@ -17,7 +17,7 @@ class SampleTest extends TestCase
 
     public function testGetRandom()
     {
-        AspectMockTest::func('App\Model', 'random_int', 1000);
+        AspectMockTest::func('App\Models', 'random_int', 1000);
 
         $expected = 1000;
 
@@ -28,7 +28,7 @@ class SampleTest extends TestCase
     {
         $object = new \stdClass();
 
-        $test = AspectMockTest::double('App\Model\Database\User', ['getById' => $object]);
+        $test = AspectMockTest::double('App\Models\Database\User', ['getById' => $object]);
 
         $this->assertSame($object, self::$model->getUserById(1));
 
@@ -37,7 +37,7 @@ class SampleTest extends TestCase
 
     public function testGetUserByIdNull()
     {
-        $test = AspectMockTest::double('App\Model\Database\User', ['getById' => null]);
+        $test = AspectMockTest::double('App\Models\Database\User', ['getById' => null]);
 
         $this->assertNull(self::$model->getUserById(1));
 

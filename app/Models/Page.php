@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 class Page
 {
@@ -61,6 +61,10 @@ class Page
             $start_number = $data['max_page'] - $data['page_link'] + 1;
         }
         $data['start_page'] = $start_number < $this->default_page ? $this->default_page : $start_number;
+        
+        $data['pre_page'] = $data['start_page'] > 1 ? $data['start_page'] - 1 : null;
+        $end_number = $data['start_page'] + $data['page_link'] - 1;
+        $data['next_page'] = $end_number < $data['max_page'] ? $end_number + 1 : null;
 
         return $data;
     }

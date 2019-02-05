@@ -3,7 +3,7 @@
 namespace Tests\Model;
 
 use Tests\TestCase;
-use App\Model\Page;
+use App\Models\Page;
 
 class PageTest extends TestCase
 {

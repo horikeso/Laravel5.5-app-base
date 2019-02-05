@@ -7,7 +7,7 @@ use Request;
 use Illuminate\Http\Request as HttpRequest;
 use Validator;
 use Illuminate\View\View;
-use App\Model\Sample;
+use App\Models\Sample;
 
 class SampleController extends Controller
 {

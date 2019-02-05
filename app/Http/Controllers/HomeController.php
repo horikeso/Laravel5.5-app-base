@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request as HttpRequest;
-use App\Model\Page;
-use App\Model\Database\User;
+use App\Models\Page;
+use App\Models\Database\User;
 use Request;
 use Validator;
 use Illuminate\Support\Facades\Cache;

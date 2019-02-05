@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request as HttpRequest;
-use App\Model\Database\User;
+use App\Models\Database\User;
 
 class UserController extends Controller
 {

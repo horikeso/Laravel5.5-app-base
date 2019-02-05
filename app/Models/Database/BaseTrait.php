@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Database;
+namespace App\Models\Database;
 
 trait BaseTrait
 {

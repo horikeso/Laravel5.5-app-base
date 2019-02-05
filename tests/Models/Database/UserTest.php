@@ -3,7 +3,7 @@
 namespace Tests\Model\Database;
 
 use Tests\TestCase;
-use App\Model\Database\User;
+use App\Models\Database\User;
 use Illuminate\Support\Facades\DB;
 use AspectMock\Test as AspectMockTest;
 
@@ -78,7 +78,7 @@ class UserTest extends TestCase
         DB::table(self::$model->getTableName())->insert($user_data);
 
         $mock_date = '2018-01-01 00:00:01';
-        AspectMockTest::func('App\Model\Database', 'date', $mock_date);
+        AspectMockTest::func('App\Models\Database', 'date', $mock_date);
 
         $target_id = 1;
         $this->assertTrue(self::$model->deleteById($target_id));

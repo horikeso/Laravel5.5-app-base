@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Support\Facades\Cache;
-use App\Model\Database\User;
+use App\Models\Database\User;
 
 class Sample
 {

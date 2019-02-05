@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Database;
+namespace App\Models\Database;
 
 // @see https://readouble.com/laravel/5.5/ja/facades.html#how-facades-work
 // @see https://laravel.com/api/5.5/Illuminate\Database\Query\Builder.html
@@ -10,6 +10,21 @@ class User
 {
 
     use BaseTrait;
+
+    /**
+     * 管理者が登録されているか
+     *
+     * @return boolean
+     */
+    public function isRegisteredAdmin(): bool
+    {
+        $count = DB::table($this->table_name)
+                ->where('role', \App\Models\Role::ADMIN)
+                ->where('delete_flag', 0)
+                ->count();
+
+        return $count > 0;
+    }
 
     /**
      * IDで取得
