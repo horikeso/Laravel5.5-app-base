@@ -1,0 +1,59 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/app
+    environment:
+      - DOCKER_IMAGE_NAME: test-docker-image
+      - CACHE_SKIP_FLAG: false
+    steps:
+      - checkout
+
+      # setup test enviroment
+      # https://circleci.com/blog/how-to-build-a-docker-image-on-circleci-2-0/
+      # https://circleci.com/docs/ja/2.0/caching/#%E3%82%AD%E3%83%A3%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E5%BE%A9%E5%85%83
+      - restore_cache:
+          keys:
+            - docker-image-cache-{{ .Branch }}-{{ checksum "tests/circleci-image/init.sh" }}
+            - docker-image-cache
+          paths:
+            - ~/caches/$DOCKER_IMAGE_NAME.tar
+      - run:
+          name: Build application Docker image
+          command: |
+            if [ ! -f ~/caches/$DOCKER_IMAGE_NAME.tar ] || $CACHE_SKIP_FLAG; then
+              docker build -t $DOCKER_IMAGE_NAME:latest $CIRCLE_WORKING_DIRECTORY/tests/circleci-image
+              mkdir -p ~/caches
+              docker save -o ~/caches/$DOCKER_IMAGE_NAME.tar $DOCKER_IMAGE_NAME:latest
+            else
+              set +o pipefail
+              docker load -i ~/caches/$DOCKER_IMAGE_NAME.tar | true
+            fi
+      - save_cache:
+          key: docker-image-cache-{{ .Branch }}
+          paths:
+            - ~/caches/$DOCKER_IMAGE_NAME.tar
+
+      - run:
+          name: Create Docker network
+          command: |
+            docker network create test_network
+      - run:
+          name: Build database Docker image
+          command: |
+            docker run --net test_network --name mysql -p 3306:3306 -e MYSQL_DATABASE=app_test -e MYSQL_USER=root -e MYSQL_ROOT_PASSWORD=@horiKESO2017 -d mysql:5.7
+      # circleCi not work Data Volume use Data Volume Container
+      # https://circleci.com/docs/ja/2.0/building-docker-images/#%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%81%AE%E3%83%9E%E3%82%A6%E3%83%B3%E3%83%88
+      - run:
+          name: Set Source Code
+          command: |
+            docker create -v /home/public/app --name app-volume-container alpine:3.4 /bin/true
+            docker cp $CIRCLE_WORKING_DIRECTORY/. app-volume-container:/home/public/app
+            docker run --net test_network --volumes-from app-volume-container --privileged --name app -d $DOCKER_IMAGE_NAME:latest /sbin/init
+            docker exec app composer install -d /home/public/app
+      - run:
+          name: Test
+          command: |
+            # if -w option can be used
+            # docker exec -u root -w /home/public/app app /home/public/app/vendor/bin/phpunit -d memory_limit=512M
+            docker exec -u root app bash -c 'cd /home/public/app; /home/public/app/vendor/bin/phpunit -d memory_limit=512M'
